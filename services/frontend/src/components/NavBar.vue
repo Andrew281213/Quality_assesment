@@ -21,17 +21,34 @@
             class="font-medium flex flex-col p-4 mt-4 border border-gray-100 rounded-lg bg-gray-50 md:p-0 md:flex-row md:space-x-8 md:mt-0 md:border-0 md:bg-white"
         >
           <li>
-            <a href="#"
-               class="block py-2 pl-3 pr-4 text-white bg-blue-700 rounded md:bg-transparent md:text-blue-700 md:p-0"
-               aria-current="page">Главная</a>
+            <router-link
+                :to="{name: 'MainPage'}"
+                v-bind:class="(currentRouteName == 'MainPage') ?
+                `block py-2 pl-3 pr-4 text-white bg-blue-700 rounded md:bg-transparent md:text-blue-700 md:p-0`:
+                `block py-2 pl-3 pr-4 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0`"
+            >
+              Главная
+            </router-link>
           </li>
           <li>
-            <a href="#"
-               class="block py-2 pl-3 pr-4 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0">Специальности</a>
+            <router-link
+                :to="{name: 'SpecialtiesView'}"
+                v-bind:class="(currentRouteName == 'SpecialtiesView') ?
+                `block py-2 pl-3 pr-4 text-white bg-blue-700 rounded md:bg-transparent md:text-blue-700 md:p-0`:
+                `block py-2 pl-3 pr-4 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0`"
+            >
+              Специальности
+            </router-link>
           </li>
           <li>
-            <a href="#"
-               class="block py-2 pl-3 pr-4 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0">Группы</a>
+            <router-link
+                :to="{name: 'GroupsView'}"
+                v-bind:class="(currentRouteName == 'GroupsView') ?
+                `block py-2 pl-3 pr-4 text-white bg-blue-700 rounded md:bg-transparent md:text-blue-700 md:p-0`:
+                `block py-2 pl-3 pr-4 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0`"
+            >
+              Группы
+            </router-link>
           </li>
         </ul>
       </div>
@@ -45,6 +62,11 @@ export default {
   name: 'NavBar',
   data() {
     return {}
+  },
+  computed: {
+    currentRouteName() {
+      return this.$route.name;
+    }
   }
 }
 </script>
