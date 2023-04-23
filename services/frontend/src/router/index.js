@@ -8,23 +8,39 @@ const routes = [
     {
         path: '/',
         name: 'MainPage',
-        component: MainPage
+        component: MainPage,
+        meta: {
+            title: 'Главная страница'
+        }
     },
     {
         path: '/specialties',
         name: 'SpecialtiesView',
-        component: SpecialtiesView
+        component: SpecialtiesView,
+        meta: {
+            title: 'Специальности'
+        }
     },
     {
         path: "/groups",
         name: "GroupsView",
-        component: GroupsView
+        component: GroupsView,
+        meta: {
+            title: 'Группы'
+        }
     }
 ]
 
 const router = createRouter({
     history: createWebHistory(),
     routes
+})
+
+router.beforeEach((to, from, next) => {
+    if (to.meta.title) {
+        document.title = to.meta.title
+    }
+    next()
 })
 
 export default router
