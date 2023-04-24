@@ -4,13 +4,16 @@
       <div class="overflow-x-auto shadow-md sm:rounded-lg">
         <div class="inline-block min-w-full align-middle">
           <div class="overflow-hidden ">
-            <table class="min-w-full divide-y divide-gray-200 table-fixed">
+            <table id="questions-table" class="min-w-full divide-y divide-gray-200 table-fixed">
               <thead class="bg-gray-100">
               <tr>
                 <th scope="col" class="p-4">
                   <div class="flex items-center">
-                    <input id="checkbox-all" type="checkbox"
-                           class="w-4 h-4 text-blue-600 bg-gray-100 rounded border-gray-300 focus:ring-blue-500focus:ring-2">
+                    <input
+                        id="checkbox_all" type="checkbox"
+                        class="w-4 h-4 text-blue-600 bg-gray-100 rounded border-gray-300 focus:ring-blue-500 focus:ring-2"
+                        onclick="checkAll()"
+                    >
                   </div>
                 </th>
                 <th scope="col"
@@ -58,9 +61,7 @@ export default {
   },
   computed: {
     questions() {
-      let data = this.$store.state.questions.questions
-      console.log(data)
-      return data
+      return this.$store.state.questions.questions
     }
   }
 }

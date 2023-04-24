@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h1>Main page</h1>
+    <h1>Вопросы</h1>
     <QuestionsTable></QuestionsTable>
   </div>
 </template>
