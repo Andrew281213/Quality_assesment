@@ -1,5 +1,4 @@
 from tortoise import fields, models
-from tortoise.exceptions import NoValuesFetched
 
 
 class Faculty(models.Model):

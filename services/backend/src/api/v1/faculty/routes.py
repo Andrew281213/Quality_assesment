@@ -37,7 +37,7 @@ async def create_faculty(faculty: FacultyCreate):
 
 @faculty_router.put("/{faculty_id}")
 async def update_faculty(faculty_id: int, new_data: FacultyUpdate):
-	faculty = Faculty.get_or_none(id=faculty_id)
+	faculty = await Faculty.get_or_none(id=faculty_id)
 	if faculty is None:
 		raise HTTPException(
 			status_code=status.HTTP_404_NOT_FOUND,
@@ -49,11 +49,11 @@ async def update_faculty(faculty_id: int, new_data: FacultyUpdate):
 
 @faculty_router.delete("/{faculty_id}")
 async def delete_faculty(faculty_id: int):
-	faculty = Faculty.get_or_none(id=faculty_id)
+	faculty = await Faculty.get_or_none(id=faculty_id)
 	if faculty is None:
 		raise HTTPException(
 			status_code=status.HTTP_404_NOT_FOUND,
 			detail="Факультет не найден"
 		)
 	await Faculty.filter(id=faculty_id).delete()
-	return {"message": "Факультет успешно удален"}
+	return {"message": f"Факультет {faculty.full_title} успешно удален"}
