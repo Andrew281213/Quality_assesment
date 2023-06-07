@@ -30,7 +30,7 @@ async def create_faculty(faculty: FacultyCreate):
 		return await Faculty.create(**faculty_dict)
 	except IntegrityError:
 		raise HTTPException(
-			status_code=status.HTTP_404_NOT_FOUND,
+			status_code=status.HTTP_409_CONFLICT,
 			detail="Такой факультет уже существует"
 		)
 
