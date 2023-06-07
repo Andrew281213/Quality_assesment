@@ -1,0 +1,61 @@
+version: "3"
+
+
+services:
+  backend:
+    build: ./services/backend
+    container_name: quality_assesment_backend
+    volumes:
+      - ./services/backend:/app
+    command: gunicorn --bind 0.0.0.0:5000 src.main:app -k uvicorn.workers.UvicornWorker
+    expose:
+      - 5000
+    depends_on:
+      - db
+    networks:
+      - quality_assesment
+
+  frontend:
+    build:
+      context: ./services/frontend
+      dockerfile: ./prod.Dockerfile
+    container_name: quality_assesment_frontend
+    volumes:
+      - "./services/frontend:/app"
+    expose:
+      - 10000
+    networks:
+      - quality_assesment
+
+  nginx:
+    build:
+      context: ./services/nginx
+    container_name: quality_assesment_nginx
+    ports:
+      - "7000:80"
+    depends_on:
+      - backend
+      - frontend
+    networks:
+      - quality_assesment
+
+  db:
+    image: postgres:14.1
+    expose:
+      - 5432
+    environment:
+      - POSTGRES_USER=andrew
+      - POSTGRES_PASSWORD=andrew
+      - POSTGRES_DB=quality_assesment
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - quality_assesment
+
+volumes:
+  postgres_data:
+
+
+networks:
+  quality_assesment:
+    driver: bridge
