@@ -1,12 +1,12 @@
 <template>
   <div>
-    <h1>Specialties</h1>
+    <h1>Компетенции</h1>
   </div>
 </template>
 
 <script>
   export default {
-    name: 'SpecialtiesView',
+    name: 'CompetenciesView',
     data() {
       return {}
     }

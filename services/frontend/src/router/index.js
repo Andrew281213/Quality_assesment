@@ -1,7 +1,7 @@
 import {createRouter, createWebHistory} from 'vue-router'
 
 import MainPage from "@/views/MainPage.vue"
-import SpecialtiesView from "@/views/SpecialtiesView.vue"
+import CompetenciesView from "@/views/CompetenciesView.vue";
 import GroupsView from "@/views/GroupsView.vue";
 
 const routes = [
@@ -10,15 +10,15 @@ const routes = [
         name: 'MainPage',
         component: MainPage,
         meta: {
-            title: 'Главная страница'
+            title: 'Кимы'
         }
     },
     {
-        path: '/specialties',
-        name: 'SpecialtiesView',
-        component: SpecialtiesView,
+        path: '/competencies',
+        name: 'CompetenciesView',
+        component: CompetenciesView,
         meta: {
-            title: 'Специальности'
+            title: 'Компетенции'
         }
     },
     {
