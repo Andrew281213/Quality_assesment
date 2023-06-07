@@ -1,6 +1,6 @@
 from tortoise.contrib.pydantic import pydantic_model_creator
-from .models import Discipline
 
+from .models import Discipline
 
 DisciplineCreate = pydantic_model_creator(
 	Discipline, name="DisciplineCreate", exclude=("id",)

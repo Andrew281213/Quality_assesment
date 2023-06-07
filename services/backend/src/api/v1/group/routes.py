@@ -2,9 +2,8 @@ from fastapi import APIRouter, HTTPException, status
 from tortoise.exceptions import DoesNotExist, IntegrityError
 
 from .models import Group
-from ..faculty.models import Faculty
 from .schemas import GroupCreate, GroupPublic, GroupUpdate
-
+from ..faculty.models import Faculty
 
 group_router = APIRouter()
 
@@ -19,22 +18,13 @@ async def check_faculty(idx):
 
 @group_router.get("/", response_model=list[GroupPublic])
 async def get_groups():
-	groups = await Group.all().prefetch_related("faculty")
-	res = []
-	for group in groups:
-		group_dict = dict(group)
-		group_dict["faculty_full_title"] = group.faculty.full_title
-		res.append(group_dict)
-	return res
+	return await GroupPublic.from_queryset(Group.all())
 
 
 @group_router.get("/{group_id}", response_model=GroupPublic)
 async def get_group(group_id: int):
 	try:
-		group = await Group.get(id=group_id).prefetch_related("faculty")
-		group_dict = dict(group)
-		group_dict["faculty_full_title"] = group.faculty.full_title
-		return GroupPublic(**group_dict)
+		return await Group.get(id=group_id).prefetch_related("faculty")
 	except DoesNotExist:
 		raise HTTPException(
 			status_code=status.HTTP_404_NOT_FOUND,
@@ -47,10 +37,11 @@ async def create_group(group: GroupCreate):
 	await check_faculty(group.faculty_id)
 	group_dict = group.dict(exclude_unset=True)
 	try:
-		return await Group.create(**group_dict)
+		res = await Group.create(**group_dict)
+		return await GroupPublic.from_tortoise_orm(res)
 	except IntegrityError:
 		raise HTTPException(
-			status_code=status.HTTP_404_NOT_FOUND,
+			status_code=status.HTTP_409_CONFLICT,
 			detail="Такая группа уже существует"
 		)
 
