@@ -6,8 +6,8 @@
           <div class="overflow-hidden ">
             <table id="questions-table" class="min-w-full divide-y divide-gray-200 table-fixed">
               <thead class="bg-gray-100">
-              <tr v-if="this.set_checkbox">
-                <th scope="col" class="p-4">
+              <tr>
+                <th scope="col" class="p-4" v-if="this.set_checkbox">
                   <div class="flex items-center">
                     <input
                         id="checkbox_all" type="checkbox"
