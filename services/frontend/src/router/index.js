@@ -6,12 +6,18 @@ import FacultiesView from "@/views/FacultiesView.vue";
 import GroupsView from "@/views/GroupsView.vue";
 import StudyPlansView from "@/views/StudyPlansView.vue";
 import DisciplinesView from "@/views/DisciplinesView.vue";
+import KimsView from "@/views/KimsView.vue";
 
 const routes = [
     {
-        path: '/',
+        path: '/123',
         name: 'MainPage',
-        component: MainPage,
+        component: MainPage
+    },
+    {
+        path: '/',
+        name: 'KimsView',
+        component: KimsView,
         meta: {
             title: 'Кимы'
         }
