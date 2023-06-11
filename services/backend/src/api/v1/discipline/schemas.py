@@ -1,5 +1,5 @@
-from tortoise import Tortoise
 from tortoise.contrib.pydantic import pydantic_model_creator
+from tortoise import Tortoise
 from src.database.config import TORTOISE_ORM
 
 Tortoise.init_models(TORTOISE_ORM["apps"]["models"]["models"], "models")

@@ -16,7 +16,8 @@ async def get_disciplines():
 @discipline_router.get("/{discipline_id}", response_model=DisciplinePublic)
 async def get_discipline(discipline_id: int):
 	try:
-		return await Discipline.get(id=discipline_id)
+		res = await Discipline.get(id=discipline_id)
+		return await DisciplinePublic.from_tortoise_orm(res)
 	except DoesNotExist:
 		raise HTTPException(
 			status_code=status.HTTP_404_NOT_FOUND,
