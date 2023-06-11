@@ -45,35 +45,13 @@
           </li>
           <li>
             <router-link
-                :to="{name: 'FacultiesView'}"
-                v-bind:class="(currentRouteName === 'FacultiesView') ?
-                `block py-2 pl-3 pr-4 text-white bg-blue-700 rounded md:bg-transparent md:text-blue-700 md:p-0`:
-                `block py-2 pl-3 pr-4 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0`"
-                onclick="navbarClick()"
-            >
-              Факультеты
-            </router-link>
-          </li>
-          <li>
-            <router-link
-                :to="{name: 'StudyPlansView'}"
-                v-bind:class="(currentRouteName === 'StudyPlansView') ?
-                `block py-2 pl-3 pr-4 text-white bg-blue-700 rounded md:bg-transparent md:text-blue-700 md:p-0`:
-                `block py-2 pl-3 pr-4 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0`"
-                onclick="navbarClick()"
-            >
-              Учебные планы
-            </router-link>
-          </li>
-          <li>
-            <router-link
                 :to="{name: 'DisciplinesView'}"
                 v-bind:class="(currentRouteName === 'DisciplinesView') ?
                 `block py-2 pl-3 pr-4 text-white bg-blue-700 rounded md:bg-transparent md:text-blue-700 md:p-0`:
                 `block py-2 pl-3 pr-4 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0`"
                 onclick="navbarClick()"
             >
-              Дисцплины
+              Дисциплины
             </router-link>
           </li>
         </ul>
