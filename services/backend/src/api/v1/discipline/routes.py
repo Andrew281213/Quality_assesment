@@ -30,7 +30,7 @@ async def create_discipline(discipline: DisciplineCreate):
 		return await Discipline.create(**discipline_dict)
 	except IntegrityError:
 		raise HTTPException(
-			status_code=status.HTTP_404_NOT_FOUND,
+			status_code=status.HTTP_409_CONFLICT,
 			detail="Такая дисциплина уже существует"
 		)
 
