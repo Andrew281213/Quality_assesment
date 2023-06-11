@@ -5,24 +5,21 @@ async def upgrade(db: BaseDBAsyncClient) -> str:
     return """
         CREATE TABLE IF NOT EXISTS "direction" (
     "id" SERIAL NOT NULL PRIMARY KEY,
-    "direction_code" VARCHAR(64) NOT NULL UNIQUE,
+    "code" VARCHAR(64) NOT NULL UNIQUE,
     "title" VARCHAR(128) NOT NULL
 );
-COMMENT ON COLUMN "direction"."direction_code" IS 'Шифр направления';
+COMMENT ON COLUMN "direction"."code" IS 'Шифр направления';
 COMMENT ON COLUMN "direction"."title" IS 'Название направления';
 CREATE TABLE IF NOT EXISTS "opop" (
     "id" SERIAL NOT NULL PRIMARY KEY,
-    "program_code" VARCHAR(64) NOT NULL,
-    "direction_code" VARCHAR(64) NOT NULL,
-    "profile_title" VARCHAR(128) NOT NULL,
+    "code" VARCHAR(64) NOT NULL UNIQUE,
+    "title" VARCHAR(128) NOT NULL,
     "start_year" INT NOT NULL,
-    CONSTRAINT "uid_opop_program_dcc281" UNIQUE ("program_code", "direction_code")
+    "direction_id" INT NOT NULL REFERENCES "direction" ("id") ON DELETE CASCADE
 );
-CREATE INDEX IF NOT EXISTS "idx_opop_program_c74c2a" ON "opop" ("program_code");
-CREATE INDEX IF NOT EXISTS "idx_opop_directi_30960b" ON "opop" ("direction_code");
-COMMENT ON COLUMN "opop"."program_code" IS 'Шифр программы';
-COMMENT ON COLUMN "opop"."direction_code" IS 'Шифр направления';
-COMMENT ON COLUMN "opop"."profile_title" IS 'Название профиля';
+CREATE INDEX IF NOT EXISTS "idx_opop_code_829bbc" ON "opop" ("code");
+COMMENT ON COLUMN "opop"."code" IS 'Шифр программы';
+COMMENT ON COLUMN "opop"."title" IS 'Название профиля';
 COMMENT ON COLUMN "opop"."start_year" IS 'Год начала программы';
 CREATE TABLE IF NOT EXISTS "competence" (
     "id" SERIAL NOT NULL PRIMARY KEY,
