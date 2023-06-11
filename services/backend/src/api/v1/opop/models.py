@@ -7,3 +7,6 @@ class Opop(models.Model):
 	title = fields.CharField(max_length=128, null=False, description="Название профиля")
 	start_year = fields.IntField(description="Год начала программы")
 	direction = fields.ForeignKeyField("models.Direction", "opop")
+
+	class PydanticMeta:
+		exclude = ("disciplines",)

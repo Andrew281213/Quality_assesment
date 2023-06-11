@@ -9,7 +9,8 @@ discipline_router = APIRouter()
 
 @discipline_router.get("/", response_model=list[DisciplinePublic])
 async def get_disciplines():
-	return await Discipline.all()
+	res = Discipline.all()
+	return await DisciplinePublic.from_queryset(res)
 
 
 @discipline_router.get("/{discipline_id}", response_model=DisciplinePublic)
@@ -27,8 +28,9 @@ async def get_discipline(discipline_id: int):
 async def create_discipline(discipline: DisciplineCreate):
 	discipline_dict = discipline.dict(exclude_unset=True)
 	try:
-		return await Discipline.create(**discipline_dict)
-	except IntegrityError:
+		res = await Discipline.create(**discipline_dict)
+		return await DisciplinePublic.from_tortoise_orm(res)
+	except IntegrityError as e:
 		raise HTTPException(
 			status_code=status.HTTP_409_CONFLICT,
 			detail="Такая дисциплина уже существует"
