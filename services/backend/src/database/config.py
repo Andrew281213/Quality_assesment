@@ -8,8 +8,9 @@ TORTOISE_ORM = {
 	"apps": {
 		"models": {
 			"models": [
-				"src.api.v1.study_plan.models", "src.api.v1.competence.models", "src.api.v1.kim.models",
-				"src.api.v1.group.models", "src.api.v1.discipline.models", "src.api.v1.faculty.models", "aerich.models"
+				"src.api.v1.direction.models",
+				"src.api.v1.opop.models", "src.api.v1.competence.models", "src.api.v1.kim.models",
+				"src.api.v1.discipline.models", "aerich.models"
 			],
 			"default_connection": "default"
 		}

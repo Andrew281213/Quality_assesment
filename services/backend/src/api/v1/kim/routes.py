@@ -2,6 +2,7 @@ from fastapi import APIRouter, HTTPException, status
 from tortoise.exceptions import DoesNotExist, IntegrityError
 
 from .models import Kim, KimApplicability
+from ..competence.routes import _get_competence_discipline
 from .schemas import KimPublic, KimUpdate, KimCreate, KimApplicabilityPublic, KimApplicabilityCreate
 
 kim_router = APIRouter()
@@ -54,10 +55,11 @@ async def get_applicabilities(kim_id: int):
 async def create_applicability(kim_id: int, kim_applicability: KimApplicabilityCreate):
 	await check_kim(kim_id)
 	kim_applicability_dict = kim_applicability.dict()
+	await _get_competence_discipline(idx=kim_applicability.discipline_competence_id)
 	try:
 		res = await KimApplicability.create(kim_id=kim_id, **kim_applicability_dict)
 		return await KimApplicabilityPublic.from_tortoise_orm(res)
-	except IntegrityError:
+	except IntegrityError as e:
 		raise HTTPException(
 			status_code=status.HTTP_409_CONFLICT,
 			detail="Такая связь уже существует"

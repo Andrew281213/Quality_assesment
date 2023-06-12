@@ -2,9 +2,6 @@ import {createRouter, createWebHistory} from 'vue-router'
 
 import MainPage from "@/views/MainPage.vue"
 import CompetenciesView from "@/views/CompetenciesView.vue";
-import FacultiesView from "@/views/FacultiesView.vue";
-import GroupsView from "@/views/GroupsView.vue";
-import StudyPlansView from "@/views/StudyPlansView.vue";
 import DisciplinesView from "@/views/DisciplinesView.vue";
 import KimsView from "@/views/KimsView.vue";
 
@@ -28,30 +25,6 @@ const routes = [
         component: CompetenciesView,
         meta: {
             title: 'Компетенции'
-        }
-    },
-    {
-        path: "/groups",
-        name: "GroupsView",
-        component: GroupsView,
-        meta: {
-            title: 'Группы'
-        }
-    },
-    {
-        path: "/faculties",
-        name: "FacultiesView",
-        component: FacultiesView,
-        meta: {
-            title: "Факультеты"
-        }
-    },
-    {
-        path: "/plans",
-        name: "StudyPlansView",
-        component: StudyPlansView,
-        meta: {
-            title: "Учебные планы"
         }
     },
     {

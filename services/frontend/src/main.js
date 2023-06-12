@@ -6,6 +6,6 @@ import router from './router'
 import store from './store'
 
 axios.defaults.withCredentials = true
-axios.defaults.baseURL = 'http://localhost:7000/'   // backend fastapi
+axios.defaults.baseURL = 'http://localhost:5000/'   // backend fastapi
 
 createApp(App).use(router).use(store).mount('#app')
