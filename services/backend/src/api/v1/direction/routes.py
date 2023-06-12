@@ -37,3 +37,17 @@ async def create_direction(direction: DirectionCreate):
 			status_code=status.HTTP_409_CONFLICT,
 			detail="Такое направление уже существует"
 		)
+
+
+@direction_router.put("/{direction_id}", response_model=DirectionPublic)
+async def update_direction(direction_id: int, direction: DirectionUpdate):
+	await _get_direction(direction_id)
+	await Direction.filter(id=direction_id).update(**direction.dict())
+	return await DirectionPublic.from_tortoise_orm(await Direction.get(id=direction_id))
+
+
+@direction_router.delete("/{direction_id}")
+async def delete_direction(direction_id: int):
+	direction = await _get_direction(direction_id)
+	await Direction.filter(id=direction_id).delete()
+	return {"msg": f"Направление {direction.title} успешно удалено"}

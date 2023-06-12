@@ -6,6 +6,8 @@ import DisciplinesView from "@/views/DisciplinesView.vue";
 import KimsView from "@/views/KimsView.vue";
 import DirectionsView from "@/views/DirectionsView.vue";
 import OpopsView from "@/views/OpopsView.vue";
+import DirectionView from "@/views/DirectionView.vue";
+import DirectionCreateView from "@/views/DirectionCreateView.vue";
 
 const routes = [
     {
@@ -43,6 +45,20 @@ const routes = [
         component: DirectionsView,
         meta: {
             title: "Направления"
+        }
+    },
+    {
+        path: "/directions/:direction_id",
+        name: "DirectionView",
+        component: DirectionView,
+        props: true
+    },
+    {
+        path: "/directions/create",
+        name: "DirectionCreateView",
+        component: DirectionCreateView,
+        meta: {
+            title: "Создание направления"
         }
     },
     {
