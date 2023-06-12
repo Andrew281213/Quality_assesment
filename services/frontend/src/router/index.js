@@ -4,6 +4,8 @@ import MainPage from "@/views/MainPage.vue"
 import CompetenciesView from "@/views/CompetenciesView.vue";
 import DisciplinesView from "@/views/DisciplinesView.vue";
 import KimsView from "@/views/KimsView.vue";
+import DirectionsView from "@/views/DirectionsView.vue";
+import OpopsView from "@/views/OpopsView.vue";
 
 const routes = [
     {
@@ -33,6 +35,22 @@ const routes = [
         component: DisciplinesView,
         meta: {
             title: "Дисциплины"
+        }
+    },
+    {
+        path: "/directions",
+        name: "DirectionsView",
+        component: DirectionsView,
+        meta: {
+            title: "Направления"
+        }
+    },
+    {
+        path: "/opops",
+        name: "OpopsView",
+        component: OpopsView,
+        meta: {
+            title: "ОПОПы"
         }
     }
 ]
