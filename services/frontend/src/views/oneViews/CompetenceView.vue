@@ -1,5 +1,5 @@
 <template>
-<div class="flex items-center justify-center p-12">
+  <div class="flex items-center justify-center p-12">
     <div class="mx-auto w-full max-w-[550px]">
       <div
           class="errors"
@@ -14,13 +14,13 @@
               for="title"
               class="mb-3 block text-base font-medium text-gray-700"
           >
-            Название дисциплины
+            Название компетенции
           </label>
           <input
               type="text"
               name="title"
               id="title"
-              placeholder="Название дисциплины"
+              placeholder="Название компетенции"
               v-model="form.title"
               class="w-full rounded-md border border-blue-300 bg-white py-2 px-4 text-base font-medium text-gray-700 outline-none focus:border-blue-500 focus:shadow-md"
           />
@@ -30,32 +30,34 @@
               for="code"
               class="mb-3 block text-base font-medium text-gray-700"
           >
-            Шифр дисциплины
+            Шифр компетенции
           </label>
           <input
               type="text"
               name="code"
               id="code"
-              placeholder="Шифр дисциплины"
+              placeholder="Шифр компетенции"
               v-model="form.code"
               class="w-full rounded-md border border-blue-300 bg-white py-2 px-4 text-base font-medium text-gray-700 outline-none focus:border-blue-500 focus:shadow-md"
           />
         </div>
         <div class="mb-5">
           <label
-              for="end_semester"
+              for="type"
               class="mb-3 block text-base font-medium text-gray-700"
           >
-            Семестр окончания
+            Тип компетенции
           </label>
-          <input
-              type="text"
-              name="end_semester"
-              id="end_semester"
-              placeholder="Семестр окончания"
-              v-model="form.end_semester"
+          <select
+              name="type"
+              id="type"
               class="w-full rounded-md border border-blue-300 bg-white py-2 px-4 text-base font-medium text-gray-700 outline-none focus:border-blue-500 focus:shadow-md"
-          />
+              v-model="form.type"
+          >
+            <option value="ОК">ОК</option>
+            <option value="ОПК">ОПК</option>
+            <option value="ПК">ПК</option>
+          </select>
         </div>
         <div class="mb-5">
           <label
@@ -68,7 +70,7 @@
               name="opop"
               id="opop"
               class="w-full rounded-md border border-blue-300 bg-white py-2 px-4 text-base font-medium text-gray-700 outline-none focus:border-blue-500 focus:shadow-md"
-              v-model="form.program_id"
+              v-model="form.opop_id"
           >
             <option
                 v-for="opop in opops"
@@ -96,59 +98,57 @@
 import {mapGetters, mapActions} from 'vuex'
 
 export default {
-  name: 'DisciplineView',
+  name: 'CompetenceView',
   components: {},
-  props: ['discipline_id'],
+  props: ['competence_id'],
   data() {
     return {
       errors: [],
       form: {
         code: '',
         title: '',
-        end_semester: '',
-        program_id: ''
+        type: '',
+        opop_id: ''
       }
     }
   },
   async created() {
-    await this.viewDiscipline()
+    await this.viewCompetence()
     await this.getOpops()
   },
   computed: {
-    ...mapGetters({discipline: 'stateDiscipline', opops: 'stateOpops'}),
+    ...mapGetters({competence: 'stateCompetence', opops: 'stateOpops'}),
   },
   methods: {
-    ...mapActions(['getDiscipline', 'updateDiscipline', 'getOpops']),
-    async viewDiscipline() {
+    ...mapActions(['getCompetence', 'updateCompetence', 'getOpops']),
+    async viewCompetence() {
       try {
-        await this.getDiscipline(this.discipline_id)
-        this.form.code = this.discipline.code
-        this.form.title = this.discipline.title
-        this.form.end_semester = this.discipline.end_semester
-        this.form.program_id = this.discipline.program.id
+        await this.getCompetence(this.competence_id)
+        console.log(this.competence)
+        this.form.code = this.competence.code
+        this.form.title = this.competence.title
+        this.form.type = this.competence.type
+        this.form.opop_id = this.competence.opop.id
       } catch (error) {
         console.error(error)
-        this.$router.push("/disciplines")
+        this.$router.push("/competencies")
       }
     },
     async save() {
-      console.log(this.form)
       try {
-        let discipline = {
-          id: this.discipline_id,
+        let competence = {
+          id: this.competence_id,
           form: this.form
         }
-        await this.updateDiscipline(discipline)
-        this.$router.push('/disciplines')
+        await this.updateCompetence(competence)
+        this.$router.push('/competencies')
       } catch (error) {
         this.errors = []
         let req = error["request"]
-        if (req["status"] === 409) {
-          this.errors.push(JSON.parse(req["response"]))
-          window.scrollTo(0, 0)
-        }
+        this.errors.push(JSON.parse(req["response"]))
+        window.scrollTo(0, 0)
       }
-    }
+    },
   }
 }
 </script>

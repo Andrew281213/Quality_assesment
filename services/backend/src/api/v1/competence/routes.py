@@ -61,11 +61,17 @@ async def get_competence(competence_id: int):
 @competence_router.put("/{competence_id}", response_model=CompetencePublic)
 async def update_competence(competence_id: int, new_data: CompetenceUpdate):
 	await _get_competence(competence_id)
-	await Competence.filter(id=competence_id).update(**new_data.dict())
+	try:
+		await Competence.filter(id=competence_id).update(**new_data.dict())
+	except IntegrityError:
+		raise HTTPException(
+			status_code=status.HTTP_409_CONFLICT,
+			detail="Такая компетенция уже существует"
+		)
 	return await CompetencePublic.from_tortoise_orm(await Competence.get(id=competence_id))
 
 
-@competence_router.delete("/{competence_id}/")
+@competence_router.delete("/{competence_id}")
 async def delete_competence(competence_id: int):
 	competence = await _get_competence(competence_id)
 	await Competence.filter(id=competence_id).delete()

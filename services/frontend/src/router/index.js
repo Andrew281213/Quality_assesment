@@ -12,6 +12,8 @@ import OpopCreateView from "@/views/createViews/OpopCreateView.vue";
 import OpopView from "@/views/oneViews/OpopView.vue";
 import DisciplineView from "@/views/oneViews/DisciplineView.vue";
 import DisciplineCreateView from "@/views/createViews/DisciplineCreateView.vue"
+import CompetenceCreateView from "@/views/createViews/CompetenceCreateView.vue";
+import CompetenceView from "@/views/oneViews/CompetenceView.vue";
 
 const routes = [
     {
@@ -33,6 +35,20 @@ const routes = [
         component: CompetenciesView,
         meta: {
             title: 'Компетенции'
+        }
+    },
+    {
+        path: "/competencies/:competence_id",
+        name: "CompetenceView",
+        component: CompetenceView,
+        props: true
+    },
+    {
+        path: "/competencies/create",
+        name: "CompetenceCreateView",
+        component: CompetenceCreateView,
+        meta: {
+            title: "Создание компетенции"
         }
     },
     {

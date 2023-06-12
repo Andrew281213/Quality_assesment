@@ -8,6 +8,9 @@ class Competence(models.Model):
 	type = fields.CharField(max_length=32, null=False, description="Тип компетенции")
 	opop = fields.ForeignKeyField("models.Opop", "competencies")
 
+	class Meta:
+		ordering = ("id",)
+
 	class PydanticMeta:
 		exclude = ("kim_applicability", "discipline_competence")
 
