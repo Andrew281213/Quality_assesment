@@ -3,7 +3,7 @@ from tortoise import fields, models
 
 class Kim(models.Model):
 	id = fields.IntField(pk=True, index=True)
-	text = fields.TextField(null=False)
+	text = fields.CharField(max_length=255, null=False, unique=True)
 	img = fields.CharField(max_length=255, null=True)
 
 	class PydanticMeta:
@@ -11,9 +11,9 @@ class Kim(models.Model):
 
 
 class KimApplicability(models.Model):
+	id = fields.IntField(pk=True, index=True)
 	kim = fields.ForeignKeyField("models.Kim", "kim_applicability")
-	competence = fields.ForeignKeyField("models.Competence", "kim_applicability")
-	discipline = fields.ForeignKeyField("models.Discipline", "kim_applicability")
+	discipline_competence = fields.ForeignKeyField("models.DisciplineCompetence", "kim_applicability")
 
 	class Meta:
-		unique_together = ("kim", "competence", "discipline")
+		unique_together = ("kim", "discipline_competence")

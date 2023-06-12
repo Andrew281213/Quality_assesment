@@ -1,6 +1,10 @@
 from tortoise.contrib.pydantic import pydantic_model_creator
 
 from .models import Kim, KimApplicability
+from tortoise import Tortoise
+from src.database.config import TORTOISE_ORM
+
+Tortoise.init_models(TORTOISE_ORM["apps"]["models"]["models"], "models")
 
 
 KimPublic = pydantic_model_creator(
@@ -16,13 +20,14 @@ KimUpdate = pydantic_model_creator(
 )
 
 KimApplicabilityPublic = pydantic_model_creator(
-	KimApplicability, name="KimApplicabilityPublic", exclude=("discipline.study_plan_disciplines",)
+	KimApplicability, name="KimApplicabilityPublic",
+	exclude=("discipline_competence.competence.opop", "discipline_competence.discipline.program")
 )
 
 KimApplicabilityCreate = pydantic_model_creator(
-	KimApplicability, name="kimApplicabilityCreate", include=("competence_id", "discipline_id")
+	KimApplicability, name="kimApplicabilityCreate", include=("discipline_competence_id",)
 )
 
 KimApplicabilityUpdate = pydantic_model_creator(
-	KimApplicability, name="KimApplicabilityUpdate"
+	KimApplicability, name="KimApplicabilityUpdate", include=("discipline_competence_id",)
 )

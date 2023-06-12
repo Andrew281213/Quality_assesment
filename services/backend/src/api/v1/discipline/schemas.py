@@ -7,6 +7,7 @@ Tortoise.init_models(TORTOISE_ORM["apps"]["models"]["models"], "models")
 
 from .models import Discipline
 
+
 DisciplineCreate = pydantic_model_creator(
 	Discipline, name="DisciplineCreate", include=("code", "title", "end_semester", "program_id")
 )

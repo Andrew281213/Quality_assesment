@@ -9,4 +9,4 @@ class Discipline(models.Model):
 	program = fields.ForeignKeyField("models.Opop", "disciplines")
 
 	class PydanticMeta:
-		exclude = ("kim_applicability",)
+		exclude = ("kim_applicability", "discipline_competence", "program.competencies")

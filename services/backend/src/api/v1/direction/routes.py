@@ -7,6 +7,16 @@ from .schemas import DirectionPublic, DirectionCreate, DirectionUpdate
 direction_router = APIRouter()
 
 
+async def _get_direction(idx: int):
+	res = await Direction.get_or_none(id=idx)
+	if res is None:
+		raise HTTPException(
+			status_code=status.HTTP_404_NOT_FOUND,
+			detail="Такое направление не найдено"
+		)
+	return res
+
+
 @direction_router.get("/", response_model=list[DirectionPublic])
 async def get_directions():
 	return await Direction.all()
@@ -14,13 +24,7 @@ async def get_directions():
 
 @direction_router.get("/{direction_id}", response_model=DirectionPublic)
 async def get_direction(direction_id: int):
-	try:
-		return await Direction.get(id=direction_id)
-	except DoesNotExist:
-		raise HTTPException(
-			status_code=status.HTTP_404_NOT_FOUND,
-			detail="Направление не найдено"
-		)
+	return await DirectionPublic.from_tortoise_orm(await _get_direction(direction_id))
 
 
 @direction_router.post("/", response_model=DirectionPublic)
