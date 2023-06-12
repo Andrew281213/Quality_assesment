@@ -1,12 +1,12 @@
 <template>
-  <router-link
-      :to="{name: 'OpopCreateView'}"
-      class="hover:shadow-form rounded-md bg-blue-700 py-3 px-3 mb-5 mt-10 text-base font-semibold text-white outline-none hover:bg-blue-600"
-  >
-    Создать ОПОП
-  </router-link>
   <div class="max-w-5xl mx-auto mt-5">
-    <div class="flex flex-col">
+    <router-link
+        :to="{name: 'OpopCreateView'}"
+        class="hover:shadow-form rounded-md bg-blue-700 py-3 px-3 mt-10 text-base font-semibold text-white outline-none hover:bg-blue-600"
+    >
+      Создать ОПОП
+    </router-link>
+    <div class="flex flex-col mt-6">
       <div class="overflow-x-auto shadow-md sm:rounded-lg">
         <div class="inline-block min-w-full align-middle">
           <div class="overflow-hidden ">
@@ -81,8 +81,7 @@ export default {
   name: 'OpopsView',
   components: {},
   data() {
-    return {
-    }
+    return {}
   },
   created: function () {
     return this.$store.dispatch("getOpops")

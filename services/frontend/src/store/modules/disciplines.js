@@ -18,6 +18,18 @@ const actions = {
     async getDiscipline({ commit }, discipline_id) {
         let { data } = await axios.get(`api/v1/discipline/${discipline_id}`)
         commit("setDiscipline", data)
+    },
+    // eslint-disable-next-line no-empty-pattern
+    async createDiscipline({}, discipline) {
+        await axios.post("api/v1/discipline/", discipline.form)
+    },
+    // eslint-disable-next-line no-empty-pattern
+    async updateDiscipline({}, discipline) {
+        await axios.put(`api/v1/discipline/${discipline.id}`, discipline.form)
+    },
+    // eslint-disable-next-line no-empty-pattern
+    async deleteDiscipline({}, discipline_id) {
+        await axios.delete(`api/v1/discipline/${discipline_id}`)
     }
 }
 

@@ -10,6 +10,8 @@ import DirectionView from "@/views/DirectionView.vue";
 import DirectionCreateView from "@/views/DirectionCreateView.vue";
 import OpopCreateView from "@/views/OpopCreateView.vue";
 import OpopView from "@/views/OpopView.vue";
+import DisciplineView from "@/views/DisciplineView.vue";
+import DisciplineCreateView from "@/views/DisciplineCreateView.vue"
 
 const routes = [
     {
@@ -39,6 +41,20 @@ const routes = [
         component: DisciplinesView,
         meta: {
             title: "Дисциплины"
+        }
+    },
+    {
+        path: "/disciplines/:discipline_id",
+        name: "DisciplineView",
+        component: DisciplineView,
+        props: true
+    },
+    {
+        path: "/disciplines/create",
+        name: "DisciplineCreateView",
+        component: DisciplineCreateView,
+        meta: {
+            title: "Создание дисциплины"
         }
     },
     {
