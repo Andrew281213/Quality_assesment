@@ -8,5 +8,8 @@ class Opop(models.Model):
 	start_year = fields.IntField(description="Год начала программы")
 	direction = fields.ForeignKeyField("models.Direction", "opop")
 
+	class Meta:
+		ordering = ("id",)
+
 	class PydanticMeta:
 		exclude = ("disciplines",)

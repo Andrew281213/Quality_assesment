@@ -8,6 +8,8 @@ import DirectionsView from "@/views/DirectionsView.vue";
 import OpopsView from "@/views/OpopsView.vue";
 import DirectionView from "@/views/DirectionView.vue";
 import DirectionCreateView from "@/views/DirectionCreateView.vue";
+import OpopCreateView from "@/views/OpopCreateView.vue";
+import OpopView from "@/views/OpopView.vue";
 
 const routes = [
     {
@@ -67,6 +69,20 @@ const routes = [
         component: OpopsView,
         meta: {
             title: "ОПОПы"
+        }
+    },
+    {
+        path: "/opops/:opop_id",
+        name: "OpopView",
+        component: OpopView,
+        props: true
+    },
+    {
+        path: "/opops/create",
+        name: "OpopCreateView",
+        component: OpopCreateView,
+        meta: {
+            title: "Создание ОПОПа"
         }
     }
 ]

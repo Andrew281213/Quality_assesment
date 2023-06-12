@@ -42,7 +42,13 @@ async def create_direction(direction: DirectionCreate):
 @direction_router.put("/{direction_id}", response_model=DirectionPublic)
 async def update_direction(direction_id: int, direction: DirectionUpdate):
 	await _get_direction(direction_id)
-	await Direction.filter(id=direction_id).update(**direction.dict())
+	try:
+		await Direction.filter(id=direction_id).update(**direction.dict())
+	except IntegrityError:
+		raise HTTPException(
+			status_code=status.HTTP_409_CONFLICT,
+			detail="Такое направление уже существует"
+		)
 	return await DirectionPublic.from_tortoise_orm(await Direction.get(id=direction_id))
 
 

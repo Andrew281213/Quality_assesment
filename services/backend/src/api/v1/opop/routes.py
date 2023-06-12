@@ -47,12 +47,18 @@ async def get_opop(opop_id: int):
 async def update_opop(opop_id: int, opop: OpopUpdate):
 	opop_dict = opop.dict()
 	await _get_opop(opop_id)
-	await Opop.filter(id=opop_id).update(**opop_dict)
-	return await OpopPublic.from_tortoise_orm(Opop.get(id=opop_id))
+	try:
+		await Opop.filter(id=opop_id).update(**opop_dict)
+	except IntegrityError:
+		raise HTTPException(
+			status_code=status.HTTP_409_CONFLICT,
+			detail="Такой профиль уже существует"
+		)
+	return await OpopPublic.from_tortoise_orm(await Opop.get(id=opop_id))
 
 
 @opop_router.delete("/{opop_id}")
-async def update_opop(opop_id: int):
+async def delete_opop(opop_id: int):
 	opop = await _get_opop(opop_id)
 	await Opop.filter(id=opop_id).delete()
 	return {"msg": f"Профиль {opop.title} успешно удален"}

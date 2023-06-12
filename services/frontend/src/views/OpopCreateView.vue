@@ -1,5 +1,5 @@
 <template>
-<div class="flex items-center justify-center p-12">
+  <div class="flex items-center justify-center p-12">
     <div class="mx-auto w-full max-w-[550px]">
       <div
           class="errors"
@@ -14,13 +14,13 @@
               for="title"
               class="mb-3 block text-base font-medium text-gray-700"
           >
-            Название направления
+            Название профиля
           </label>
           <input
               type="text"
               name="title"
               id="title"
-              placeholder="Название направления"
+              placeholder="Название профиля"
               v-model="form.title"
               class="w-full rounded-md border border-blue-300 bg-white py-2 px-4 text-base font-medium text-gray-700 outline-none focus:border-blue-500 focus:shadow-md"
           />
@@ -30,14 +30,52 @@
               for="code"
               class="mb-3 block text-base font-medium text-gray-700"
           >
-            Шифр направления
+            Шифр профиля
           </label>
           <input
               type="text"
               name="code"
               id="code"
-              placeholder="Шифр направления"
+              placeholder="Шифр профиля"
               v-model="form.code"
+              class="w-full rounded-md border border-blue-300 bg-white py-2 px-4 text-base font-medium text-gray-700 outline-none focus:border-blue-500 focus:shadow-md"
+          />
+        </div>
+        <div class="mb-5">
+          <label
+              for="direction"
+              class="mb-3 block text-base font-medium text-gray-700"
+          >
+            Направление
+          </label>
+          <select
+              name="direction"
+              id="direction"
+              class="w-full rounded-md border border-blue-300 bg-white py-2 px-4 text-base font-medium text-gray-700 outline-none focus:border-blue-500 focus:shadow-md"
+              v-model="form.direction_id"
+          >
+            <option
+                v-for="direction in directions"
+                :key="direction.id"
+                :value="direction.id"
+            >
+              {{ direction.title }}
+            </option>
+          </select>
+        </div>
+        <div class="mb-5">
+          <label
+              for="start_year"
+              class="mb-3 block text-base font-medium text-gray-700"
+          >
+            Год начала
+          </label>
+          <input
+              type="text"
+              name="start_year"
+              id="start_year"
+              placeholder="Год начала"
+              v-model="form.start_year"
               class="w-full rounded-md border border-blue-300 bg-white py-2 px-4 text-base font-medium text-gray-700 outline-none focus:border-blue-500 focus:shadow-md"
           />
         </div>
@@ -53,33 +91,40 @@
     </div>
   </div>
 </template>
+
 <script>
 import {mapGetters, mapActions} from 'vuex'
 
 export default {
-  name: 'DirectionView',
+  name: 'OpopView',
   components: {},
+  props: ['opop_id'],
   data() {
     return {
       errors: [],
       form: {
         code: '',
-        title: ''
+        title: '',
+        direction_id: '',
+        start_year: ''
       }
     }
   },
+  async created() {
+    await this.getDirections()
+  },
   computed: {
-    ...mapGetters({direction: 'stateDirection'}),
+    ...mapGetters({directions: "stateDirections"}),
   },
   methods: {
-    ...mapActions(['createDirection']),
+    ...mapActions(['getDirections', 'createOpop']),
     async save() {
       try {
-        let direction = {
+        let opop = {
           form: this.form
         }
-        await this.createDirection(direction)
-        this.$router.push('/directions')
+        await this.createOpop(opop)
+        this.$router.push('/opops')
       } catch (error) {
         this.errors = []
         let req = error["request"]

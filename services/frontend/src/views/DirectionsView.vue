@@ -68,8 +68,6 @@ export default {
   components: {},
   data() {
     return {
-      currentDirection: null,
-      isModalVisible: false,
     }
   },
   created: function () {

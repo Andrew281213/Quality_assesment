@@ -1,6 +1,13 @@
 <template>
 <div class="flex items-center justify-center p-12">
     <div class="mx-auto w-full max-w-[550px]">
+      <div
+          class="errors"
+          v-for="(error, index) in errors"
+          :key="index"
+      >
+        <p class="font-semibold text-red-700 pb-2">{{ error.detail }}</p>
+      </div>
       <form @submit.prevent="save">
         <div class="mb-5">
           <label
@@ -56,6 +63,7 @@ export default {
   props: ['direction_id'],
   data() {
     return {
+      errors: [],
       form: {
         code: '',
         title: ''
@@ -89,7 +97,12 @@ export default {
         await this.updateDirection(direction)
         this.$router.push('/directions')
       } catch (error) {
-        console.error(error)
+        this.errors = []
+        let req = error["request"]
+        if (req["status"] === 409) {
+          this.errors.push(JSON.parse(req["response"]))
+          window.scrollTo(0, 0)
+        }
       }
     }
   }
