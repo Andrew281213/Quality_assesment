@@ -46,8 +46,14 @@ async def create_discipline(discipline: DisciplineCreate):
 @discipline_router.put("/{discipline_id}")
 async def update_discipline(discipline_id: int, new_data: DisciplineUpdate):
 	await _get_discipline(discipline_id)
-	await Discipline.filter(id=discipline_id).update(**new_data.dict())
-	return {"message": "Данные успешно обновлены"}
+	try:
+		await Discipline.filter(id=discipline_id).update(**new_data.dict())
+	except IntegrityError:
+		raise HTTPException(
+			status_code=status.HTTP_409_CONFLICT,
+			detail="Такая дисциплина уже существует"
+		)
+	return {"msg": "Данные успешно обновлены"}
 
 
 @discipline_router.delete("/{discipline_id}")
