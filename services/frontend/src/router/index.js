@@ -1,17 +1,17 @@
 import {createRouter, createWebHistory} from 'vue-router'
 
 import MainPage from "@/views/MainPage.vue"
-import CompetenciesView from "@/views/CompetenciesView.vue";
-import DisciplinesView from "@/views/DisciplinesView.vue";
-import KimsView from "@/views/KimsView.vue";
-import DirectionsView from "@/views/DirectionsView.vue";
-import OpopsView from "@/views/OpopsView.vue";
-import DirectionView from "@/views/DirectionView.vue";
-import DirectionCreateView from "@/views/DirectionCreateView.vue";
-import OpopCreateView from "@/views/OpopCreateView.vue";
-import OpopView from "@/views/OpopView.vue";
-import DisciplineView from "@/views/DisciplineView.vue";
-import DisciplineCreateView from "@/views/DisciplineCreateView.vue"
+import CompetenciesView from "@/views/listViews/CompetenciesView.vue";
+import DisciplinesView from "@/views/listViews/DisciplinesView.vue";
+import KimsView from "@/views/listViews/KimsView.vue";
+import DirectionsView from "@/views/listViews/DirectionsView.vue";
+import OpopsView from "@/views/listViews/OpopsView.vue";
+import DirectionView from "@/views/oneViews/DirectionView.vue";
+import DirectionCreateView from "@/views/createViews/DirectionCreateView.vue";
+import OpopCreateView from "@/views/createViews/OpopCreateView.vue";
+import OpopView from "@/views/oneViews/OpopView.vue";
+import DisciplineView from "@/views/oneViews/DisciplineView.vue";
+import DisciplineCreateView from "@/views/createViews/DisciplineCreateView.vue"
 
 const routes = [
     {
