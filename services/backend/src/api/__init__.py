@@ -5,6 +5,7 @@ from .v1.competence.routes import competence_router
 from .v1.kim.routes import kim_router
 from .v1.direction.routes import direction_router
 from .v1.opop.routes import opop_router
+from .v1.dcs.routes import dcs_router
 
 
 router = APIRouter()
@@ -13,3 +14,4 @@ router.include_router(competence_router, prefix="/v1/competence", tags=["compete
 router.include_router(kim_router, prefix="/v1/kim", tags=["kim"])
 router.include_router(direction_router, prefix="/v1/direction", tags=["direction"])
 router.include_router(opop_router, prefix="/v1/opop", tags=["opop"])
+router.include_router(dcs_router, prefix="/v1/dcs", tags=["dcs"])

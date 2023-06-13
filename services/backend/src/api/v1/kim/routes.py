@@ -2,7 +2,7 @@ from fastapi import APIRouter, HTTPException, status
 from tortoise.exceptions import DoesNotExist, IntegrityError
 
 from .models import Kim, KimApplicability
-from ..competence.routes import _get_competence_discipline
+from ..dcs.routes import _get_competence_discipline
 from .schemas import KimPublic, KimUpdate, KimCreate, KimApplicabilityPublic, KimApplicabilityCreate
 
 kim_router = APIRouter()
