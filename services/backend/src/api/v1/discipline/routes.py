@@ -60,4 +60,4 @@ async def update_discipline(discipline_id: int, new_data: DisciplineUpdate):
 async def delete_discipline(discipline_id: int):
 	discipline = await _get_discipline(discipline_id)
 	await Discipline.filter(id=discipline_id).delete()
-	return {"message": f"Дисциплина {discipline.title} успешно удалена"}
+	return {"msg": f"Дисциплина {discipline.title} успешно удалена"}

@@ -14,6 +14,8 @@ import DisciplineView from "@/views/oneViews/DisciplineView.vue";
 import DisciplineCreateView from "@/views/createViews/DisciplineCreateView.vue"
 import CompetenceCreateView from "@/views/createViews/CompetenceCreateView.vue";
 import CompetenceView from "@/views/oneViews/CompetenceView.vue";
+import KimView from "@/views/oneViews/KimView.vue";
+import KimCreateView from "@/views/createViews/KimCreateView.vue";
 
 const routes = [
     {
@@ -27,6 +29,20 @@ const routes = [
         component: KimsView,
         meta: {
             title: 'Кимы'
+        }
+    },
+    {
+        path: '/kims/:kim_id',
+        name: 'KimView',
+        component: KimView,
+        props: true
+    },
+    {
+        path: '/kims/create',
+        name: 'KimCreateView',
+        component: KimCreateView,
+        meta: {
+            title: "Создание кима"
         }
     },
     {

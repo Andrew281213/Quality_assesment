@@ -8,7 +8,7 @@ Tortoise.init_models(TORTOISE_ORM["apps"]["models"]["models"], "models")
 
 
 KimPublic = pydantic_model_creator(
-	Kim, name="KimPublic", include=("id", "text", "img")
+	Kim, name="KimPublic"
 )
 
 KimCreate = pydantic_model_creator(

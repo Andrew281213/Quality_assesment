@@ -16,8 +16,20 @@ const actions = {
         commit("setKims", data)
     },
     async getKim({ commit }, kim_id) {
-        let { data } = await axios.get(`api/v1/kim/${kim_id}`)
+        let { data } = await axios.get(`api/v1/kim/${kim_id}/`)
         commit("setKim", data)
+    },
+    // eslint-disable-next-line no-empty-pattern
+    async createKim({}, kim) {
+        await axios.post("api/v1/kim/", kim.form)
+    },
+    // eslint-disable-next-line no-empty-pattern
+    async updateKim({}, kim) {
+        await axios.put(`api/v1/kim/${kim.id}`, kim.form)
+    },
+    // eslint-disable-next-line no-empty-pattern
+    async deleteKim({}, kim_id) {
+        await axios.delete(`api/v1/kim/${kim_id}`)
     }
 }
 

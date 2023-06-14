@@ -7,7 +7,8 @@ class Kim(models.Model):
 	img = fields.CharField(max_length=255, null=True)
 
 	class PydanticMeta:
-		exclude = ("kim_applicability", )
+		pass
+		# exclude = ("kim_applicability", )
 
 
 class KimApplicability(models.Model):
@@ -17,3 +18,4 @@ class KimApplicability(models.Model):
 
 	class Meta:
 		unique_together = ("kim", "discipline_competence")
+		ordering = ("id",)

@@ -90,7 +90,7 @@
 import {mapGetters, mapActions} from "vuex";
 
 export default {
-  name: 'DisciplineView',
+  name: 'DisciplinesView',
   components: {},
   data() {
     return {}
