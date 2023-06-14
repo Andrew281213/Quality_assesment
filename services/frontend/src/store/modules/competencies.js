@@ -12,11 +12,11 @@ const getters = {
 
 const actions = {
     async getCompetencies({ commit }) {
-        let { data } = await axios.get("api/v1/competence")
+        let { data } = await axios.get("api/v1/competence/")
         commit("setCompetencies", data)
     },
     async getCompetence({ commit }, competence_id) {
-        let { data } = await axios.get(`api/v1/competence/${competence_id}`)
+        let { data } = await axios.get(`api/v1/competence/${competence_id}/`)
         commit("setCompetence", data)
     },
     // eslint-disable-next-line no-empty-pattern

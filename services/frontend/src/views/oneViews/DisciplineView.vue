@@ -1,5 +1,5 @@
 <template>
-<div class="flex items-center justify-center p-12">
+  <div class="flex items-center justify-center p-12">
     <div class="mx-auto w-full max-w-[550px]">
       <div
           class="errors"
@@ -80,6 +80,19 @@
           </select>
         </div>
         <div>
+          <label class="mb-3 block text-base font-medium text-gray-700">Компетенции</label>
+          <VueMultiselect
+              v-model="selected_competencies"
+              :options="competencies_for_select"
+              :multiple="true"
+              placeholder="Наберите слово для поиска"
+              label="title"
+              track-by="id"
+              :closeOnSelect="false"
+              v-if="competencies !== null"
+          />
+        </div>
+        <div>
           <button
               type="submit"
               class="hover:shadow-form rounded-md bg-blue-700 py-3 px-8 text-base font-semibold text-white outline-none hover:bg-blue-600"
@@ -94,31 +107,43 @@
 
 <script>
 import {mapGetters, mapActions} from 'vuex'
+import VueMultiselect from "vue-multiselect"
 
 export default {
   name: 'DisciplineView',
-  components: {},
+  components: {VueMultiselect},
   props: ['discipline_id'],
+
   data() {
     return {
+      selected_competencies: [],
+      competencies_for_select: [],
       errors: [],
       form: {
         code: '',
         title: '',
         end_semester: '',
         program_id: ''
+      },
+      dcs_form: {
+        competencies: []
       }
     }
   },
   async created() {
-    await this.viewDiscipline()
     await this.getOpops()
+    await this.viewDiscipline()
   },
   computed: {
-    ...mapGetters({discipline: 'stateDiscipline', opops: 'stateOpops'}),
+    ...mapGetters({
+      discipline: 'stateDiscipline',
+      opops: 'stateOpops',
+      dcs: 'stateDcs',
+      competencies: 'stateCompetencies'
+    })
   },
   methods: {
-    ...mapActions(['getDiscipline', 'updateDiscipline', 'getOpops']),
+    ...mapActions(['getDiscipline', 'updateDiscipline', 'getOpops', 'getDcs', 'createDc', 'deleteDc', 'getCompetencies']),
     async viewDiscipline() {
       try {
         await this.getDiscipline(this.discipline_id)
@@ -126,19 +151,66 @@ export default {
         this.form.title = this.discipline.title
         this.form.end_semester = this.discipline.end_semester
         this.form.program_id = this.discipline.program.id
+        await this.get_competencies()
       } catch (error) {
         console.error(error)
         this.$router.push("/disciplines")
       }
     },
+    async get_competencies() {
+      await this.getCompetencies()
+      await this.getDcs({"discipline_id": this.discipline_id})
+      let competencies_for_select = []
+      this.competencies.forEach(function (item) {
+        competencies_for_select.push({"title": item.title, "id": item.id})
+      })
+      let selected_competencies = []
+      this.dcs.forEach(function (item) {
+        selected_competencies.push({"id": item.competence.id, "title": item.competence.title})
+      })
+      this.competencies_for_select = competencies_for_select
+      this.selected_competencies = selected_competencies
+    },
     async save() {
-      console.log(this.form)
       try {
         let discipline = {
           id: this.discipline_id,
           form: this.form
         }
         await this.updateDiscipline(discipline)
+        // Находим id выбранных компетенций
+        let competencies = []
+        this.selected_competencies.forEach(function (item) {
+          competencies.push(item.id)
+        })
+        let exist_competencies = []
+        this.dcs.forEach(function (item) {
+          exist_competencies.push(item.competence.id)
+        })
+        // Находим id компетенций для удаления
+        let to_delete_dcs = []
+        this.dcs.forEach(function (item) {
+          if (!competencies.includes(item.competence.id)) {
+            to_delete_dcs.push(item.id)
+          }
+        })
+        // Перебираем массив id выбранных компетенций
+        for (let i = 0; i < competencies.length; i++) {
+          // Если компетенция уже связана - пропускаем
+          if (exist_competencies.includes(competencies[i])) {
+            continue
+          }
+          // Создаем новую связь
+          let dc_form = {
+            "competence_id": competencies[i],
+            "discipline_id": this.discipline_id
+          }
+          await this.createDc(dc_form)
+        }
+        // Удаляем связи
+        for (let i = 0; i < to_delete_dcs.length; i++) {
+          await this.deleteDc(to_delete_dcs[i])
+        }
         this.$router.push('/disciplines')
       } catch (error) {
         this.errors = []
@@ -152,3 +224,5 @@ export default {
   }
 }
 </script>
+
+<style src="vue-multiselect/dist/vue-multiselect.css"></style>

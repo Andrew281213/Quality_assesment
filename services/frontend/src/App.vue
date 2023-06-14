@@ -9,6 +9,4 @@
 import NavBar from "@/components/NavBar.vue"
 </script>
 
-<style>
-
-</style>
+<style src="./assets/tailwind.css"></style>

@@ -1,6 +1,9 @@
 <template>
   <div>
     <h1>Кимы</h1>
+    <button type="submit" class="hover:shadow-form rounded-md bg-blue-700 py-3 px-3 mr-3 text-base font-semibold text-white outline-none hover:bg-blue-600">Типо кнопка добавления кима</button>
+    <button type="submit" class="hover:shadow-form rounded-md bg-blue-700 py-3 px-3 text-base font-semibold text-white outline-none hover:bg-blue-600">Типо кнопка выгрузки случайных кимов</button>
+    <p>Тут должен быть фильтр...</p>
     <TableComponent :set_checkbox=true header_title="Ким" :data="get_table_data()"></TableComponent>
   </div>
 </template>

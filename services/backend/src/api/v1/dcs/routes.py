@@ -1,14 +1,13 @@
-from fastapi import APIRouter, HTTPException, status, Query
-from tortoise.exceptions import DoesNotExist, IntegrityError
-from tortoise.expressions import Q
 from typing import Annotated
+
+from fastapi import APIRouter, HTTPException, status, Query
+from tortoise.exceptions import IntegrityError
+from tortoise.expressions import Q
 
 from .models import DisciplineCompetence
 from .schemas import DCCreate, DCPublic, DCUpdate
-
 from ..competence.routes import _get_competence
 from ..discipline.routes import _get_discipline
-
 
 dcs_router = APIRouter()
 
@@ -30,13 +29,16 @@ async def _get_competence_discipline(idx: int = None, competence_id: int = None,
 
 @dcs_router.get("/", response_model=list[DCPublic])
 async def get_dcs(
-	competence_id: Annotated[int | None, Query(description="Id компетенции")] = None,
-	discipline_id: Annotated[int | None, Query(description="Id дисциплины")] = None
+		competence_id: Annotated[int | None, Query(description="Id компетенции")] = None,
+		discipline_id: Annotated[int | None, Query(description="Id дисциплины")] = None
 ):
-	if None not in (competence_id, discipline_id):
+	if all(x is None for x in (competence_id, discipline_id)):
+		res = DisciplineCompetence.all()
+	elif None not in (competence_id, discipline_id):
 		res = DisciplineCompetence.filter(competence_id=competence_id, discipline_id=discipline_id)
 	else:
-		res = DisciplineCompetence.filter(Q(competence_id=competence_id, discipline_id=discipline_id, join_type="OR")).all()
+		res = DisciplineCompetence.filter(
+			Q(competence_id=competence_id, discipline_id=discipline_id, join_type="OR")).all()
 	return await DCPublic.from_queryset(res)
 
 

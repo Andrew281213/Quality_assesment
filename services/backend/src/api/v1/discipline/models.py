@@ -8,5 +8,8 @@ class Discipline(models.Model):
 	end_semester = fields.IntField(null=False, description="Последний семестр")
 	program = fields.ForeignKeyField("models.Opop", "disciplines")
 
+	class Meta:
+		ordering = ("id",)
+
 	class PydanticMeta:
 		exclude = ("kim_applicability", "discipline_competence", "program.competencies")
