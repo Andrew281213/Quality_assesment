@@ -1,5 +1,7 @@
-from fastapi import APIRouter, HTTPException, status
+from fastapi import APIRouter, HTTPException, status, Query
 from tortoise.exceptions import DoesNotExist, IntegrityError
+from tortoise.expressions import Q
+from typing import Annotated
 
 from .models import Kim, KimApplicability
 from ..dcs.routes import _get_competence_discipline
@@ -14,6 +16,16 @@ async def _get_kim(kim_id: int):
 		raise HTTPException(
 			status_code=status.HTTP_404_NOT_FOUND,
 			detail="Такой ким не существует"
+		)
+	return res
+
+
+async def _get_applicability(idx: int):
+	res = await KimApplicability.get_or_none(id=idx)
+	if res is None:
+		raise HTTPException(
+			status_code=status.HTTP_404_NOT_FOUND,
+			detail="Такой связи кима и компетенции-дисциплины не существует"
 		)
 	return res
 
@@ -61,14 +73,21 @@ async def delete_kim(kim_id: int):
 	return {"msg": f"Ким успешно удален"}
 
 
-@kim_router.get("/{kim_id}/applicability", response_model=list[KimApplicabilityPublic])
-async def get_applicabilities(kim_id: int):
-	await _get_kim(kim_id)
-	res = KimApplicability.filter(kim_id=kim_id).all()
+@kim_router.get("/applicability/", response_model=list[KimApplicabilityPublic])
+async def get_applicabilities(
+		kim_id: Annotated[int | None, Query(description="Id кима")] = None,
+		dc_id: Annotated[int | None, Query(description="Id связи компетенции и дисциплины")] = None
+):
+	if all(x is None for x in (kim_id, dc_id)):
+		res = KimApplicability.all()
+	elif None not in (kim_id, dc_id):
+		res = KimApplicability.filter(kim_id=kim_id, discipline_competence_id=dc_id).all()
+	else:
+		res = KimApplicability.filter(Q(kim_id=kim_id, discipline_competence_id=dc_id, join_type="OR")).all()
 	return await KimApplicabilityPublic.from_queryset(res)
 
 
-@kim_router.post("/{kim_id}/applicability/", response_model=KimApplicabilityPublic)
+@kim_router.post("/applicability/", response_model=KimApplicabilityPublic)
 async def create_applicability(kim_id: int, kim_applicability: KimApplicabilityCreate):
 	await _get_kim(kim_id)
 	kim_applicability_dict = kim_applicability.dict()
@@ -83,4 +102,8 @@ async def create_applicability(kim_id: int, kim_applicability: KimApplicabilityC
 		)
 
 
-# TODO: put & delete methods for kim & kim applicability
+@kim_router.delete("/applicability/{applicability_id}")
+async def delete_applicability(applicability_id: int):
+	await _get_applicability(applicability_id)
+	await KimApplicability.filter(id=applicability_id).delete()
+	return {"msg": "Связь кима и компетенции-дисциплины успешно удалена"}
