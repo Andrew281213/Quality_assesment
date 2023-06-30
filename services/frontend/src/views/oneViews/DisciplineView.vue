@@ -86,7 +86,7 @@
               :options="competencies_for_select"
               :multiple="true"
               placeholder="Наберите слово для поиска"
-              label="title"
+              label="code"
               track-by="id"
               :closeOnSelect="false"
               v-if="competencies !== null"
@@ -162,11 +162,11 @@ export default {
       await this.getDcs({"discipline_id": this.discipline_id})
       let competencies_for_select = []
       this.competencies.forEach(function (item) {
-        competencies_for_select.push({"title": item.title, "id": item.id})
+        competencies_for_select.push({"title": item.title, "code": item.code, "id": item.id})
       })
       let selected_competencies = []
       this.dcs.forEach(function (item) {
-        selected_competencies.push({"id": item.competence.id, "title": item.competence.title})
+        selected_competencies.push({"id": item.competence.id, "code": item.competence.code, "title": item.competence.title})
       })
       this.competencies_for_select = competencies_for_select
       this.selected_competencies = selected_competencies

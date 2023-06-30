@@ -1,11 +1,58 @@
 <template>
-  <div class="max-w-5xl mx-auto mt-5">
+  <div class="max-w-5xl mx-auto mt-5 mb-10">
     <router-link
         :to="{name: 'KimCreateView'}"
-        class="hover:shadow-form rounded-md bg-blue-700 py-3 px-3 text-base font-semibold text-white outline-none hover:bg-blue-600"
+        class="hover:shadow-form rounded-md bg-blue-700 py-3 px-3 text-base font-semibold text-white outline-none hover:bg-blue-600 inline-block mr-3"
     >
       Создать ким
     </router-link>
+    <div
+        class="hover:shadow-form rounded-md bg-blue-700 py-3 px-3 text-base font-semibold text-white outline-none hover:bg-blue-600 inline-block"
+    >
+      Выгрузить случайные
+    </div>
+    <div class="mt-5 bg-gray-100 border rounded-lg pt-5">
+      <div class="mb-5 px-3 py-2 inline-block">
+        <label
+            class="mb-3 block text-base font-medium text-gray-700 inline-block mr-2"
+        >Компетенция</label>
+        <select
+            class="min-w-2/8 rounded-md border border-blue-300 bg-white py-2 px-4 text-base font-medium text-gray-700 outline-none focus:border-blue-500 focus:shadow-md inline-block"
+            v-model="this.competence_id"
+        >
+          <option value="null">
+            Все
+          </option>
+          <option
+              v-for="competence in competencies"
+              :key="competence.id"
+              :value="competence.id"
+          >
+            {{ competence.code }}
+          </option>
+        </select>
+      </div>
+      <div class="mb-5 px-3 py-2 inline-block">
+        <label
+            class="mb-3 block text-base font-medium text-gray-700 inline-block mr-2"
+        >Дисциплина</label>
+        <select
+            class="min-w-2/8 rounded-md border border-blue-300 bg-white py-2 px-4 text-base font-medium text-gray-700 outline-none focus:border-blue-500 focus:shadow-md inline-block"
+            v-model="this.discipline_id"
+        >
+          <option value="null">
+            Все
+          </option>
+          <option
+              v-for="discipline in disciplines"
+              :key="discipline.id"
+              :value="discipline.id"
+          >
+            {{ discipline.code + " " + discipline.title }}
+          </option>
+        </select>
+      </div>
+    </div>
     <div class="flex flex-col mt-6">
       <div class="overflow-x-auto shadow-md sm:rounded-lg">
         <div class="inline-block min-w-full align-middle">
@@ -19,8 +66,6 @@
                 </th>
                 <th scope="col" class="p-4">
                   <span class="sr-only">Edit</span>
-                </th>
-                <th scope="col" class="p-4">
                   <span class="sr-only">Delete</span>
                 </th>
               </tr>
@@ -34,7 +79,7 @@
                 <td class="py-4 px-6 text-sm font-medium text-gray-900">
                   {{ item.text }}
                 </td>
-                <td class="py-4 text-sm font-medium text-right">
+                <td class="py-4 text-sm font-medium text-right pr-5">
                   <router-link :to="{name: 'KimView', params: {kim_id: item.id}}"
                                class="text-blue-600 hover:underline">
                     <svg width="24px" height="24px" viewBox="0 0 24 24" fill="none"
@@ -44,7 +89,8 @@
                             fill="#000000"/>
                     </svg>
                   </router-link>
-                  <svg width="24px" height="24px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" @click="delete_kim(index)" class="inline-block">
+                  <svg width="24px" height="24px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"
+                       @click="delete_kim(index)" class="inline-block">
                     <g id="Interface / Trash_Full">
                       <path id="Vector"
                             d="M14 10V17M10 10V17M6 6V17.8C6 18.9201 6 19.4798 6.21799 19.9076C6.40973 20.2839 6.71547 20.5905 7.0918 20.7822C7.5192 21 8.07899 21 9.19691 21H14.8031C15.921 21 16.48 21 16.9074 20.7822C17.2837 20.5905 17.5905 20.2839 17.7822 19.9076C18 19.4802 18 18.921 18 17.8031V6M6 6H8M6 6H4M8 6H16M8 6C8 5.06812 8 4.60241 8.15224 4.23486C8.35523 3.74481 8.74432 3.35523 9.23438 3.15224C9.60192 3 10.0681 3 11 3H13C13.9319 3 14.3978 3 14.7654 3.15224C15.2554 3.35523 15.6447 3.74481 15.8477 4.23486C15.9999 4.6024 16 5.06812 16 6M16 6H18M18 6H20"
@@ -69,17 +115,49 @@ import {mapGetters, mapActions} from "vuex";
 export default {
   name: 'KimsView',
   components: {},
+  all_kims: [],
   data() {
-    return {}
+    return {
+      competence_id: null,
+      discipline_id: null,
+      form: {
+        competence_id: null,
+        discipline_id: null
+      }
+    }
   },
   created: function () {
-    return this.$store.dispatch("getKims")
+    this.$store.dispatch("getKims", this.form)
+    this.$store.dispatch("getCompetencies")
+    this.$store.dispatch("getDisciplines")
+  },
+  watch: {
+    competence_id: function (new_val, old_val) {
+      if (new_val !== old_val) {
+        if (new_val === "null") {
+          this.form.competence_id = null
+        } else {
+          this.form.competence_id = this.competence_id
+        }
+        this.$store.dispatch("getKims", this.form)
+      }
+    },
+    discipline_id: function (new_val, old_val) {
+      if (new_val !== old_val) {
+        if (new_val === "null") {
+          this.form.discipline_id = null
+        } else {
+          this.form.discipline_id = this.discipline_id
+        }
+        this.$store.dispatch("getKims", this.form)
+      }
+    }
   },
   computed: {
-    ...mapGetters({kims: "stateKims"})
+    ...mapGetters({kims: "stateKims", competencies: "stateCompetencies", disciplines: "stateDisciplines"})
   },
   methods: {
-    ...mapActions(["getKims", "deleteKim"]),
+    ...mapActions(["getKims", "deleteKim", "getCompetencies", "getDisciplines"]),
     async delete_kim(kim_index) {
       let kim = this.kims[kim_index]
       let answer = confirm(`Вы действительно хотите удалить этот ким?`)

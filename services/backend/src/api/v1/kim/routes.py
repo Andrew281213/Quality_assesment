@@ -1,11 +1,16 @@
+import asyncio
+
 from fastapi import APIRouter, HTTPException, status, Query
 from tortoise.exceptions import DoesNotExist, IntegrityError
-from tortoise.expressions import Q
+from tortoise.expressions import Q, Subquery
+from tortoise.contrib.postgres.functions import Random
 from typing import Annotated
 
 from .models import Kim, KimApplicability
 from ..dcs.routes import _get_competence_discipline
 from .schemas import KimPublic, KimUpdate, KimCreate, KimApplicabilityPublic, KimApplicabilityCreate
+from ..dcs.models import DisciplineCompetence
+
 
 kim_router = APIRouter()
 
@@ -31,8 +36,25 @@ async def _get_applicability(idx: int):
 
 
 @kim_router.get("/", response_model=list[KimPublic])
-async def get_kims():
-	res = Kim.all()
+async def get_kims(
+	discipline_id: Annotated[int | None, Query(description="Id дисциплины")] = None,
+	competence_id: Annotated[int | None, Query(description="Id компетенции")] = None
+):
+	if all(x is None for x in (discipline_id, competence_id)):
+		res = Kim.all().distinct()
+	elif None not in (discipline_id, competence_id):
+		res = Kim.exclude(kim_applicability=None).filter(
+			kim_applicability__discipline_competence__discipline_id=discipline_id,
+			kim_applicability__discipline_competence__competence_id=competence_id
+		).distinct()
+	else:
+		res = Kim.exclude(kim_applicability=None).filter(Q(
+			kim_applicability__discipline_competence__discipline_id=discipline_id,
+			kim_applicability__discipline_competence__competence_id=competence_id,
+			join_type="OR"
+		)).distinct()
+	rand = Kim.annotate(order=Random()).order_by("order").limit(2)
+	print(await KimPublic.from_queryset(rand))
 	return await KimPublic.from_queryset(res)
 
 
@@ -45,7 +67,8 @@ async def get_kim(kim_id: int):
 async def create_kim(kim: KimCreate):
 	kim_dict = kim.dict(exclude_unset=True)
 	try:
-		return await Kim.create(**kim_dict)
+		res = await Kim.create(**kim_dict)
+		return await KimPublic.from_tortoise_orm(res)
 	except IntegrityError:
 		raise HTTPException(
 			status_code=status.HTTP_409_CONFLICT,
@@ -54,7 +77,7 @@ async def create_kim(kim: KimCreate):
 
 
 @kim_router.put("/{kim_id}")
-async def update_kim(kim_id: int, new_data: KimCreate):
+async def update_kim(kim_id: int, new_data: KimUpdate):
 	await _get_kim(kim_id)
 	try:
 		await Kim.filter(id=kim_id).update(**new_data.dict())

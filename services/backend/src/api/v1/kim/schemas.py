@@ -12,11 +12,11 @@ KimPublic = pydantic_model_creator(
 )
 
 KimCreate = pydantic_model_creator(
-	Kim, name="KimCreate", exclude=("id",)
+	Kim, name="KimCreate", exclude=("id", "kim_applicability")
 )
 
 KimUpdate = pydantic_model_creator(
-	Kim, name="KimUpdate", exclude=("id",)
+	Kim, name="KimUpdate", exclude=("id", "kim_applicability")
 )
 
 KimApplicabilityPublic = pydantic_model_creator(

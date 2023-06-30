@@ -89,6 +89,7 @@ const routes = [
             title: "Создание дисциплины"
         }
     },
+    // Вывод всех направлений
     {
         path: "/directions",
         name: "DirectionsView",
@@ -97,12 +98,14 @@ const routes = [
             title: "Направления"
         }
     },
+    // Вывод выбранного направления
     {
         path: "/directions/:direction_id",
         name: "DirectionView",
         component: DirectionView,
         props: true
     },
+    // Создание направления
     {
         path: "/directions/create",
         name: "DirectionCreateView",

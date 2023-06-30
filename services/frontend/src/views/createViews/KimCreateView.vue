@@ -86,7 +86,8 @@ export default {
         this.$router.push('/')
       } catch (error) {
         this.errors = []
-        let req = error["request"]
+        console.log(error)
+        let req = error["response"]
         this.errors.push(JSON.parse(req["response"]))
         window.scrollTo(0, 0)
       }
